@@ -1,0 +1,27 @@
+{
+  "name": "myapp",
+  "version": "1.0.0",
+  "description": "my first app",
+  "source": "src/index.html",
+  "scripts": {
+    "dev": "parcel src/index.html --no-cache && parcel watch src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egoknoll/myapp.git"
+  },
+  "author": "yahor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/egoknoll/myapp/issues"
+  },
+  "homepage": "https://github.com/egoknoll/myapp#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.8.0",
+    "parcel": "^2.8.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.2"
+  }
+}

@@ -1,0 +1,36 @@
+header {
+  font-size: 62.5%;
+}
+.header__content {
+  margin: 0 auto;
+  display: flex;
+  max-width: 1200px;
+  min-height: 300px;
+  justify-content: space-between;
+  border-bottom: 5px solid;
+  border-image-source: linear-gradient(90deg, #fbc2eb 0%, #6e95d8 100%);
+  border-image-slice: 1;
+}
+.header__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h1 {
+    width: 100%;
+    padding-left: 20px;
+    font-size: 2rem;
+    text-transform: capitalize;
+    text-align: start;
+  }
+}
+.header__image {
+  width: 300px;
+  height: 200px;
+  background-image: url(../images/pngegg.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.header__current-time {
+  align-self: center;
+  font-size: 2rem;
+}

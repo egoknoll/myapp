@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Myapp</title>
+  <link rel="stylesheet" href="./styles/app.scss">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <script src="./javascript/app.js"></script>
+</head>
+<body>
+  <main id="root">
+  <header>
+    <div class="header__content">
+      <div class="header__logo">
+        <div class="header__image"></div>
+        <h1>my first app</h1>
+      </div>
+      <div class="header__current-time"></div>
+    </div>
+  </header>
+  <section class="lists">
+    <div class="lists__todo-list roster">
+      <h1>TODO</h1>
+      <div class="todo-cards cards">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-title">Title</div>
+            <div class="card-description">Description</div>
+            <div class="card-user">User</div>
+            <div class="card-created-at">Created at</div>
+          </div>
+          <div class="card-control">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+              <option selected>Choose</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+            <button type="button" class="btn btn-primary btn-delete">Delete</button>
+            <button type="button" class="btn btn-primary btn-edit">Edit</button>
+          </div>
+        </div>
+      </div>
+      <div class="lists__todo-list-modal">
+        <button type="button" class="btn btn-primary btn-add-todo" data-bs-toggle="modal" data-bs-target="#myModal-add-todo">
+          ADD TODO
+        </button>
+        <form class="modal" id="myModal-add-todo">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <input class="form-control" type="text" placeholder="Enter title">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <textarea class="form-control" placeholder="Enter description"></textarea>
+              </div>
+              <div class="modal-footer">
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                  <option selected>Choose User</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="lists__in-progress-list roster">
+      <h1>IN PROGRESS</h1>
+      <div class="in-progress-cards cards"></div>
+    </div>
+    <div class="lists__completed-list roster">
+      <h1>COMPLETED</h1>
+      <div class="completed-cards cards"></div>
+    </div>
+  </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>
