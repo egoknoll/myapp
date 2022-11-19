@@ -7,7 +7,7 @@
   <title>Myapp</title>
   <link rel="stylesheet" href="./styles/app.scss">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-  <script src="./javascript/app.js"></script>
+  <script src="./javascript/app.js" type="module"></script>
 </head>
 <body>
   <main id="root">
@@ -24,7 +24,7 @@
     <div class="lists__todo-list roster">
       <h1>TODO</h1>
       <div class="todo-cards cards">
-        <div class="card">
+        <!-- <div class="card">
           <div class="card-content">
             <div class="card-title">Title</div>
             <div class="card-description">Description</div>
@@ -34,35 +34,35 @@
           <div class="card-control">
             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
               <option selected>Choose</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option value="1">Todo</option>
+              <option value="2">In Progress</option>
+              <option value="3">Completed</option>
             </select>
             <button type="button" class="btn btn-primary btn-delete">Delete</button>
             <button type="button" class="btn btn-primary btn-edit">Edit</button>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="lists__todo-list-modal">
-        <button type="button" class="btn btn-primary btn-add-todo" data-bs-toggle="modal" data-bs-target="#myModal-add-todo">
+        <button type="button" class="btn btn-primary btn-add-todo" data-bs-toggle="modal" data-bs-target="#modal-add-todo">
           ADD TODO
         </button>
-        <form class="modal" id="myModal-add-todo">
+        <form class="modal" id="modal-add-todo">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <input class="form-control" type="text" placeholder="Enter title">
+                <input class="form-control todo-title" type="text" placeholder="Enter title">
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                <textarea class="form-control" placeholder="Enter description"></textarea>
+                <textarea class="form-control todo-description" placeholder="Enter description"></textarea>
               </div>
               <div class="modal-footer">
-                <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <select class="form-select form-select-sm todo-user" aria-label=".form-select-sm example">
                   <option selected>Choose User</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option value="first">One</option>
+                  <option value="second">Two</option>
+                  <option value="third">Three</option>
                 </select>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Confirm</button>
