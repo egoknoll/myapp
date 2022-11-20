@@ -11,12 +11,15 @@ function Card (title, description, user, status) {
   this.status = status
 }
 
-
+const listsElement = document.querySelector('.lists')
 const modalAddTodoElement = document.querySelector('#modal-add-todo')
 const todoTitleElement = document.querySelector('.todo-title')
 const todoDescriptionElement = document.querySelector('.todo-description')
 const todoUserElement = document.querySelector('.todo-user')
 const todoCardsElement = document.querySelector('.todo-cards')
+const inProgressCardsElement = document.querySelector('.in-progress-cards')
+const completedCardsElement = document.querySelector('.completed-cards')
+const deleteAllButtonElement = document.querySelector('.submit-delete-all')
 
 function getTime () {
   const date = new Date()
@@ -57,11 +60,11 @@ function getCardTemplate (todoCard) {
         <div class="card-created-at">${time}</div>
       </div>
       <div class="card-control">
-        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <select id="${id}" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
           <option selected>Choose</option>
-          <option value="1">Todo</option>
-          <option value="2">In Progress</option>
-          <option value="3">Completed</option>
+          <option value="todo">Todo</option>
+          <option value="inProgress">In Progress</option>
+          <option value="completed">Completed</option>
         </select>
         <button type="button" id="${id}" class="btn btn-primary btn-delete">Delete</button>
         <button type="button" id="${id}" class="btn btn-primary btn-edit">Edit</button>
@@ -88,6 +91,38 @@ function renderTodos () {
   todoCardsElement.innerHTML = result
 }
 
+function renderInProgress () {
+  const result = inProgressCards.reduce((prev, next) => {
+    if (next) {
+      let pattern = getCardTemplate(next)
+      return prev + pattern
+    }
+  }, '')
+  inProgressCardsElement.innerHTML = result
+}
+
+function renderCompleted () {
+  const result = completedCards.reduce((prev, next) => {
+    if (next) {
+      let pattern = getCardTemplate(next)
+      return prev + pattern
+    }
+  }, '')
+  completedCardsElement.innerHTML = result
+}
+
+function globalRender () {
+  renderTodos()
+  renderInProgress()
+  renderCompleted()
+}
+
+function handleDeleteAllButton () {
+  completedCards.length = 0
+  updateLocalStorage()
+  globalRender()
+}
+
 function handleDeleteCertainTodo ({target}) {
   if (target.classList.contains('btn-delete')) {
     todoCards.forEach((item, index) => {
@@ -95,8 +130,65 @@ function handleDeleteCertainTodo ({target}) {
         todoCards.splice(index, 1)
       }
     })
+    inProgressCards.forEach((item, index) => {
+      if (item.id == target.id) {
+        inProgressCards.splice(index, 1)
+      }
+    })
+    completedCards.forEach((item, index) => {
+      if (item.id == target.id) {
+        completedCards.splice(index, 1)
+      }
+    })
     updateLocalStorage()
-    renderTodos()
+    globalRender()
+  }
+}
+
+function handleChangeCategory ({target}) {
+  if (target.classList.contains('form-select-lg')) {
+    if (target.value == 'inProgress') {
+      todoCards.forEach((item, index) => {
+        if (item.id == target.id) {
+          inProgressCards.push(item)
+          todoCards.splice(index, 1)
+        }
+      })
+      completedCards.forEach((item, index) => {
+        if (item.id == target.id) {
+          inProgressCards.push(item)
+          completedCards.splice(index, 1)
+        }
+      })
+    } else if (target.value == 'completed') {
+      todoCards.forEach((item, index) => {
+        if (item.id == target.id) {
+          completedCards.push(item)
+          todoCards.splice(index, 1)
+        }
+      })
+      inProgressCards.forEach((item, index) => {
+        if (item.id == target.id) {
+          completedCards.push(item)
+          inProgressCards.splice(index, 1)
+        }
+      })
+    } else {
+      inProgressCards.forEach((item, index) => {
+        if (item.id == target.id) {
+          todoCards.push(item)
+          inProgressCards.splice(index, 1)
+        }
+      })
+      completedCards.forEach((item, index) => {
+        if (item.id == target.id) {
+          todoCards.push(item)
+          completedCards.splice(index, 1)
+        }
+      })
+    }
+    updateLocalStorage()
+    globalRender()
   }
 }
 
@@ -112,15 +204,18 @@ function handleAddTodo (event) {
   todoCards.push(todoCard)
   modalAddTodoElement.reset()
   updateLocalStorage()
-  renderTodos()
+  globalRender()
 }
 
 function handleReload () {
-  renderTodos()
+  globalRender()
 }
 
 modalAddTodoElement.addEventListener('submit', handleAddTodo)
-todoCardsElement.addEventListener('click', handleDeleteCertainTodo)
+listsElement.addEventListener('click', handleDeleteCertainTodo)
+listsElement.addEventListener('change', handleChangeCategory)
+deleteAllButtonElement.addEventListener('click', handleDeleteAllButton)
+
 
 window.addEventListener('DOMContentLoaded', handleClock)
 window.addEventListener('DOMContentLoaded', handleReload)

@@ -15,7 +15,7 @@
     <div class="header__content">
       <div class="header__logo">
         <div class="header__image"></div>
-        <h1>my first app</h1>
+        <h1>my little trello</h1>
       </div>
       <div class="header__current-time"></div>
     </div>
@@ -60,9 +60,9 @@
               <div class="modal-footer">
                 <select class="form-select form-select-sm todo-user" aria-label=".form-select-sm example">
                   <option selected>Choose User</option>
-                  <option value="first">One</option>
-                  <option value="second">Two</option>
-                  <option value="third">Three</option>
+                  <option value="first">Billy</option>
+                  <option value="second">Van</option>
+                  <option value="third">Mark</option>
                 </select>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Confirm</button>
@@ -79,6 +79,20 @@
     <div class="lists__completed-list roster">
       <h1>COMPLETED</h1>
       <div class="completed-cards cards"></div>
+      <button class = "btn-delete-all btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirm-delete-all">Delete all</button>
+      <form class="modal" id="confirm-delete-all">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>Are you really sure?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="sumbit" class="btn btn-primary submit-delete-all">Yes</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </section>
   </main>

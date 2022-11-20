@@ -11,6 +11,19 @@
     justify-content: center;
     align-items: center;
   }
+  .btn-delete-all {
+    width: 100%;
+    background-color: #fe9fd6;
+    border: none;
+    border-radius: 0;
+    min-height: 60px;
+    color: black;
+    font-size: 2rem;
+    &:hover {
+      background-color: #fe9fd6;
+      opacity: 85%;
+    }
+  }
 }
 .roster {
   width: 28%;
