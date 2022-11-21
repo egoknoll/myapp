@@ -2,13 +2,13 @@ const todoCards = JSON.parse(localStorage.getItem('todos')) || []
 const inProgressCards = JSON.parse(localStorage.getItem('inProgress')) || []
 const completedCards = JSON.parse(localStorage.getItem('completed')) || []
 
-function Card (title, description, user, status) {
+function Card (title, description, user, color) {
   this.id = Date.now()
   this.createdAt = getTime()
   this.title = title
   this.description = description
   this.user = user
-  this.status = status
+  this.color = color
 }
 
 const listsElement = document.querySelector('.lists')
@@ -20,6 +20,8 @@ const todoCardsElement = document.querySelector('.todo-cards')
 const inProgressCardsElement = document.querySelector('.in-progress-cards')
 const completedCardsElement = document.querySelector('.completed-cards')
 const deleteAllButtonElement = document.querySelector('.submit-delete-all')
+const todoColorpickerElement = document.querySelector('.form-control-color')
+const completeAllButtonElement = document.querySelector('.btn-complete-all')
 
 function getTime () {
   const date = new Date()
@@ -51,8 +53,9 @@ function getCardTemplate (todoCard) {
   const user = todoCard.user
   const time = todoCard.createdAt
   const id = todoCard.id
+  const color = todoCard.color
   return `
-    <div class="card">
+    <div class="card" style="background-color: ${color}">
       <div class="card-content">
         <div class="card-title">${title}</div>
         <div class="card-description">${description}</div>
@@ -67,7 +70,32 @@ function getCardTemplate (todoCard) {
           <option value="completed">Completed</option>
         </select>
         <button type="button" id="${id}" class="btn btn-primary btn-delete">Delete</button>
-        <button type="button" id="${id}" class="btn btn-primary btn-edit">Edit</button>
+        <button type="button" id="${id}" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-primary btn-edit">Edit</button>
+        <form class="modal" id="edit">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <input class="form-control todo-title" type="text" placeholder="${title}">
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <textarea class="form-control todo-description" placeholder="${description}"></textarea>
+            </div>
+            <div class="modal-footer">
+              <select class="form-select form-select-sm todo-user" aria-label=".form-select-sm example">
+                <option selected>Choose User</option>
+                <option value="Billy">Billy</option>
+                <option value="Van">Van</option>
+                <option value="Mark">Mark</option>
+              </select>
+              <label for="colorpicker" class="form-label">Card color</label>
+              <input type="color" class="form-control form-control-color" id="colorpicker" value="${color}" title="Choose your color">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </form>
       </div>
     </div>
   `
@@ -192,6 +220,15 @@ function handleChangeCategory ({target}) {
   }
 }
 
+function handleCompleteAllElement () {
+  inProgressCards.forEach(item => {
+    completedCards.push(item)
+  })
+  inProgressCards.length = 0
+  updateLocalStorage()
+  globalRender()
+}
+
 function handleClock () {
   setInterval(() => {
     document.querySelector('.header__current-time').innerHTML = getTime()
@@ -200,7 +237,7 @@ function handleClock () {
 
 function handleAddTodo (event) {
   event.preventDefault()
-  const todoCard = new Card(todoTitleElement.value, todoDescriptionElement.value, todoUserElement.value, 'todo')
+  const todoCard = new Card(todoTitleElement.value, todoDescriptionElement.value, todoUserElement.value, todoColorpickerElement.value)
   todoCards.push(todoCard)
   modalAddTodoElement.reset()
   updateLocalStorage()
@@ -215,6 +252,7 @@ modalAddTodoElement.addEventListener('submit', handleAddTodo)
 listsElement.addEventListener('click', handleDeleteCertainTodo)
 listsElement.addEventListener('change', handleChangeCategory)
 deleteAllButtonElement.addEventListener('click', handleDeleteAllButton)
+completeAllButtonElement.addEventListener('click', handleCompleteAllElement)
 
 
 window.addEventListener('DOMContentLoaded', handleClock)

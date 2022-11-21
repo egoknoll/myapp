@@ -64,6 +64,8 @@
                   <option value="second">Van</option>
                   <option value="third">Mark</option>
                 </select>
+                <label for="colorpicker" class="form-label">Card color</label>
+                <input type="color" class="form-control form-control-color" id="colorpicker" value="#e0ffff" title="Choose your color">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Confirm</button>
               </div>
@@ -75,6 +77,7 @@
     <div class="lists__in-progress-list roster">
       <h1>IN PROGRESS</h1>
       <div class="in-progress-cards cards"></div>
+      <button class = "btn-complete-all btn btn-primary">Complete All</button>
     </div>
     <div class="lists__completed-list roster">
       <h1>COMPLETED</h1>
