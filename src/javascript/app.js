@@ -70,32 +70,32 @@ function getCardTemplate (todoCard) {
           <option value="completed">Completed</option>
         </select>
         <button type="button" id="${id}" class="btn btn-primary btn-delete">Delete</button>
-        <button type="button" id="${id}" data-bs-toggle="modal" data-bs-target="#edit" class="btn btn-primary btn-edit">Edit</button>
-        <form class="modal" id="edit">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <input class="form-control todo-title" type="text" placeholder="${title}">
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <textarea class="form-control todo-description" placeholder="${description}"></textarea>
-            </div>
-            <div class="modal-footer">
-              <select class="form-select form-select-sm todo-user" aria-label=".form-select-sm example">
-                <option selected>Choose User</option>
-                <option value="Billy">Billy</option>
-                <option value="Van">Van</option>
-                <option value="Mark">Mark</option>
-              </select>
-              <label for="colorpicker" class="form-label">Card color</label>
-              <input type="color" class="form-control form-control-color" id="colorpicker" value="${color}" title="Choose your color">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Confirm</button>
+        <button type="button" id="${id}" data-bs-toggle="modal" data-bs-target="#edit${id}" class="btn btn-primary btn-edit">Edit</button>
+          <form class="modal edit" id="edit${id}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <input class="form-control todo-title card-title${id}" type="text" value="${title}" placeholder="${title}">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <textarea class="form-control todo-description card-description${id}" placeholder="${description}">${description}</textarea>
+              </div>
+              <div class="modal-footer">
+                <select class="form-select form-select-sm todo-user card-user${id}" value="${user}" aria-label=".form-select-sm example">
+                  <option selected value="${user}">Choose User</option>
+                  <option value="Billy">Billy</option>
+                  <option value="Van">Van</option>
+                  <option value="Mark">Mark</option>
+                </select>
+                <label for="colorpicker" class="form-label">Card color</label>
+                <input type="color" class="form-control form-control-color card-color${id}" id="colorpicker" value="${color}" title="Choose your color">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
       </div>
     </div>
   `
@@ -229,6 +229,44 @@ function handleCompleteAllElement () {
   globalRender()
 }
 
+function handleEditCertainCard (event) {
+  let target = event.target
+  if (target.classList.contains('edit')) {
+    event.preventDefault()
+    let targetId = target.id.slice(4)
+    let cardTitleElement = document.querySelector(`.card-title${targetId}`)
+    let cardDescriptionElement = document.querySelector(`.card-description${targetId}`)
+    let cardUserElement = document.querySelector(`.card-user${targetId}`)
+    let cardColorElement = document.querySelector(`.card-color${targetId}`)
+    todoCards.forEach(item => {
+      if(item.id == targetId) {
+        item.title = cardTitleElement.value
+        item.description = cardDescriptionElement.value
+        item.user = cardUserElement.value
+        item.color = cardColorElement.value
+      }
+    })
+    inProgressCards.forEach(item => {
+      if(item.id == targetId) {
+        item.title = cardTitleElement.value
+        item.description = cardDescriptionElement.value
+        item.user = cardUserElement.value
+        item.color = cardColorElement.value
+      }
+    })
+    completedCards.forEach(item => {
+      if(item.id == targetId) {
+        item.title = cardTitleElement.value
+        item.description = cardDescriptionElement.value
+        item.user = cardUserElement.value
+        item.color = cardColorElement.value
+      }
+    })
+  }
+  updateLocalStorage()
+  globalRender()
+}
+
 function handleClock () {
   setInterval(() => {
     document.querySelector('.header__current-time').innerHTML = getTime()
@@ -250,6 +288,7 @@ function handleReload () {
 
 modalAddTodoElement.addEventListener('submit', handleAddTodo)
 listsElement.addEventListener('click', handleDeleteCertainTodo)
+listsElement.addEventListener('submit', handleEditCertainCard)
 listsElement.addEventListener('change', handleChangeCategory)
 deleteAllButtonElement.addEventListener('click', handleDeleteAllButton)
 completeAllButtonElement.addEventListener('click', handleCompleteAllElement)
