@@ -40,7 +40,7 @@
             </select>
             <button type="button" class="btn btn-primary btn-delete">Delete</button>
             <button type="button" class="btn btn-primary btn-edit">Edit</button>
-          </div>
+          </div>data-bs-toggle="modal" data-bs-target="#modal-add-todo"
         </div> -->
       </div>
       <div class="lists__todo-list-modal">
@@ -60,14 +60,14 @@
               <div class="modal-footer">
                 <select class="form-select form-select-sm todo-user" aria-label=".form-select-sm example">
                   <option selected>Choose User</option>
-                  <option value="first">Billy</option>
-                  <option value="second">Van</option>
-                  <option value="third">Mark</option>
+                  <option value="Billy">Billy</option>
+                  <option value="Van">Van</option>
+                  <option value="Mark">Mark</option>
                 </select>
                 <label for="colorpicker" class="form-label">Card color</label>
                 <input type="color" class="form-control form-control-color" id="colorpicker" value="#e0ffff" title="Choose your color">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
               </div>
             </div>
           </div>
@@ -91,11 +91,28 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="sumbit" class="btn btn-primary submit-delete-all">Yes</button>
+              <button type="sumbit" class="btn btn-primary submit-delete-all" data-bs-dismiss="modal">Yes</button>
             </div>
           </div>
         </div>
       </form>
+    </div>
+    <div class="modal" id="modal-in-progress">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>There is six or more tasks already.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
   </main>

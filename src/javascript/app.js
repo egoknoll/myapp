@@ -9,6 +9,7 @@ function Card (title, description, user, color) {
   this.description = description
   this.user = user
   this.color = color
+  this.status = 'Todo'
 }
 
 const listsElement = document.querySelector('.lists')
@@ -22,6 +23,7 @@ const completedCardsElement = document.querySelector('.completed-cards')
 const deleteAllButtonElement = document.querySelector('.submit-delete-all')
 const todoColorpickerElement = document.querySelector('.form-control-color')
 const completeAllButtonElement = document.querySelector('.btn-complete-all')
+const buttonAddTodoElement = document.querySelector('.btn-add-todo')
 
 function getTime () {
   const date = new Date()
@@ -54,6 +56,7 @@ function getCardTemplate (todoCard) {
   const time = todoCard.createdAt
   const id = todoCard.id
   const color = todoCard.color
+  const status = todoCard.status
   return `
     <div class="card" style="background-color: ${color}">
       <div class="card-content">
@@ -64,7 +67,7 @@ function getCardTemplate (todoCard) {
       </div>
       <div class="card-control">
         <select id="${id}" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-          <option selected>Choose</option>
+          <option selected>${status}, current</option>
           <option value="todo">Todo</option>
           <option value="inProgress">In Progress</option>
           <option value="completed">Completed</option>
@@ -83,7 +86,7 @@ function getCardTemplate (todoCard) {
               </div>
               <div class="modal-footer">
                 <select class="form-select form-select-sm todo-user card-user${id}" value="${user}" aria-label=".form-select-sm example">
-                  <option selected value="${user}">Choose User</option>
+                  <option selected value="${user}">${user}</option>
                   <option value="Billy">Billy</option>
                   <option value="Van">Van</option>
                   <option value="Mark">Mark</option>
@@ -91,7 +94,7 @@ function getCardTemplate (todoCard) {
                 <label for="colorpicker" class="form-label">Card color</label>
                 <input type="color" class="form-control form-control-color card-color${id}" id="colorpicker" value="${color}" title="Choose your color">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" >Confirm</button>
               </div>
             </div>
           </div>
@@ -145,7 +148,8 @@ function globalRender () {
   renderCompleted()
 }
 
-function handleDeleteAllButton () {
+function handleDeleteAllButton (event) {
+  event.preventDefault()
   completedCards.length = 0
   updateLocalStorage()
   globalRender()
@@ -178,25 +182,33 @@ function handleChangeCategory ({target}) {
     if (target.value == 'inProgress') {
       todoCards.forEach((item, index) => {
         if (item.id == target.id) {
+          item.status = 'In Progress'
           inProgressCards.push(item)
           todoCards.splice(index, 1)
         }
       })
       completedCards.forEach((item, index) => {
         if (item.id == target.id) {
+          item.status = 'In Progress'
           inProgressCards.push(item)
           completedCards.splice(index, 1)
         }
       })
+      if (inProgressCards.length > 5) {
+        const modalSubmitInProgressElement = new bootstrap.Modal(document.querySelector('#modal-in-progress'))
+        modalSubmitInProgressElement.toggle()
+      }
     } else if (target.value == 'completed') {
       todoCards.forEach((item, index) => {
         if (item.id == target.id) {
+          item.status = 'Completed'
           completedCards.push(item)
           todoCards.splice(index, 1)
         }
       })
       inProgressCards.forEach((item, index) => {
         if (item.id == target.id) {
+          item.status = 'Completed'
           completedCards.push(item)
           inProgressCards.splice(index, 1)
         }
@@ -204,12 +216,14 @@ function handleChangeCategory ({target}) {
     } else {
       inProgressCards.forEach((item, index) => {
         if (item.id == target.id) {
+          item.status = 'Todo'
           todoCards.push(item)
           inProgressCards.splice(index, 1)
         }
       })
       completedCards.forEach((item, index) => {
         if (item.id == target.id) {
+          item.status = 'Todo'
           todoCards.push(item)
           completedCards.splice(index, 1)
         }
@@ -263,9 +277,6 @@ function handleEditCertainCard (event) {
       }
     })
   }
-  document.body.classList.remove('modal-open')
-  document.body.setAttribute('style', '')
-  document.querySelector('.modal-backdrop').remove()
   updateLocalStorage()
   globalRender()
 }
@@ -278,9 +289,11 @@ function handleClock () {
 
 function handleAddTodo (event) {
   event.preventDefault()
+  const modalAddTodoBs = new bootstrap.Modal(document.querySelector('#modal-add-todo'))
   const todoCard = new Card(todoTitleElement.value, todoDescriptionElement.value, todoUserElement.value, todoColorpickerElement.value)
   todoCards.push(todoCard)
   modalAddTodoElement.reset()
+  modalAddTodoBs.hide()
   updateLocalStorage()
   globalRender()
 }
