@@ -263,6 +263,9 @@ function handleEditCertainCard (event) {
       }
     })
   }
+  document.body.classList.remove('modal-open')
+  document.body.setAttribute('style', '')
+  document.querySelector('.modal-backdrop').remove()
   updateLocalStorage()
   globalRender()
 }
