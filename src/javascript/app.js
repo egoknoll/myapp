@@ -1,6 +1,7 @@
 const todoCards = JSON.parse(localStorage.getItem('todos')) || []
 const inProgressCards = JSON.parse(localStorage.getItem('inProgress')) || []
 const completedCards = JSON.parse(localStorage.getItem('completed')) || []
+const url = 'https://jsonplaceholder.typicode.com/users'
 
 function Card (title, description, user, color) {
   this.id = Date.now()
@@ -24,6 +25,7 @@ const deleteAllButtonElement = document.querySelector('.submit-delete-all')
 const todoColorpickerElement = document.querySelector('.form-control-color')
 const completeAllButtonElement = document.querySelector('.btn-complete-all')
 const buttonAddTodoElement = document.querySelector('.btn-add-todo')
+
 
 function getTime () {
   const date = new Date()
@@ -56,9 +58,11 @@ function getCardTemplate (todoCard) {
   const time = todoCard.createdAt
   const id = todoCard.id
   const color = todoCard.color
-  const status = todoCard.status
+  let todoStatus = todoCard.status == 'Todo' ? 'selected' : ''
+  let inProgressStatus = todoCard.status == 'In Progress' ? 'selected' : ''
+  let completedStatus = todoCard.status == 'Completed' ? 'selected' : ''
   return `
-    <div class="card" style="background-color: ${color}">
+    <div class="card" id="${id}" draggable="true" style="background-color: ${color}">
       <div class="card-content">
         <div class="card-title">${title}</div>
         <div class="card-description">${description}</div>
@@ -67,10 +71,9 @@ function getCardTemplate (todoCard) {
       </div>
       <div class="card-control">
         <select id="${id}" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-          <option selected>${status}, current</option>
-          <option value="todo">Todo</option>
-          <option value="inProgress">In Progress</option>
-          <option value="completed">Completed</option>
+          <option ${todoStatus} value="todo">Todo</option>
+          <option ${inProgressStatus} value="inProgress">In Progress</option>
+          <option ${completedStatus} value="completed">Completed</option>
         </select>
         <button type="button" id="${id}" class="btn btn-primary btn-delete">Delete</button>
         <button type="button" id="${id}" data-bs-toggle="modal" data-bs-target="#edit${id}" class="btn btn-primary btn-edit">Edit</button>
@@ -85,11 +88,9 @@ function getCardTemplate (todoCard) {
                 <textarea class="form-control todo-description card-description${id}" placeholder="${description}">${description}</textarea>
               </div>
               <div class="modal-footer">
-                <select class="form-select form-select-sm todo-user card-user${id}" value="${user}" aria-label=".form-select-sm example">
+                <h5 class="modal-title">Choose User:</h5>
+                <select class="form-select form-select-sm todo-user card-users card-user${id}" value="${user}" aria-label=".form-select-sm example">
                   <option selected value="${user}">${user}</option>
-                  <option value="Billy">Billy</option>
-                  <option value="Van">Van</option>
-                  <option value="Mark">Mark</option>
                 </select>
                 <label for="colorpicker" class="form-label">Card color</label>
                 <input type="color" class="form-control form-control-color card-color${id}" id="colorpicker" value="${color}" title="Choose your color">
@@ -104,12 +105,32 @@ function getCardTemplate (todoCard) {
   `
 }
 
+function getUserTemplate (user) {
+  return `
+  <option value="${user.name}">${user.name}</option>
+  `
+}
 
 function updateLocalStorage () {
   localStorage.setItem('todos', JSON.stringify(todoCards))
   localStorage.setItem('inProgress', JSON.stringify(inProgressCards))
   localStorage.setItem('completed', JSON.stringify(completedCards))
 }
+
+function renderOptions (users) {
+  const result = users.reduce((prev, next) => {
+    if (next) {
+      let pattern = getUserTemplate(next)
+      return prev + pattern
+    }
+  }, '')
+  document.querySelector('#users').innerHTML = result
+  const editUsersElements = document.querySelectorAll('.card-users')
+  editUsersElements.forEach(item => {
+    item.innerHTML += result
+  })
+}
+
 
 
 function renderTodos () {
@@ -146,6 +167,10 @@ function globalRender () {
   renderTodos()
   renderInProgress()
   renderCompleted()
+  fetchData(url, (response) => {
+    const apiData = JSON.parse(response)
+    renderOptions(apiData)
+  })
 }
 
 function handleDeleteAllButton (event) {
@@ -298,9 +323,103 @@ function handleAddTodo (event) {
   globalRender()
 }
 
+
+function handleDragAndDrop () {
+  const cardContainers = document.querySelectorAll('.cards')
+  const draggableCards = document.querySelectorAll('.card')
+  draggableCards.forEach(draggable=> {
+    draggable.addEventListener('dragstart', () => {
+      draggable.classList.add('dragging')
+    })
+    draggable.addEventListener('dragend', () => {
+      draggable.classList.remove('dragging')
+    })
+  })
+  cardContainers.forEach(container => {
+    container.addEventListener('dragover', (event) => {
+      event.preventDefault()
+      const draggingElement = document.querySelector('.dragging')
+      container.appendChild(draggingElement)
+      if (container.classList.contains('in-progress-cards')) {
+        todoCards.forEach((item, index) => {
+          if (item.id == draggingElement.id) {
+            item.status = 'In Progress'
+            inProgressCards.push(item)
+            todoCards.splice(index, 1)
+            updateLocalStorage()
+          }
+        })
+        completedCards.forEach((item, index) => {
+          if (item.id == draggingElement.id) {
+            item.status = 'In Progress'
+            inProgressCards.push(item)
+            completedCards.splice(index, 1)
+            updateLocalStorage()
+          }
+        })
+      } else if (container.classList.contains('todo-cards')) {
+        inProgressCards.forEach((item, index) => {
+          if (item.id == draggingElement.id) {
+            item.status = 'Todo'
+            todoCards.push(item)
+            inProgressCards.splice(index, 1)
+            updateLocalStorage()
+          }
+        })
+        completedCards.forEach((item, index) => {
+          if (item.id == draggingElement.id) {
+            item.status = 'Todo'
+            todoCards.push(item)
+            completedCards.splice(index, 1)
+            updateLocalStorage()
+          }
+        })
+      } else if (container.classList.contains('completed-cards')){
+        todoCards.forEach((item, index) => {
+          if (item.id == draggingElement.id) {
+            item.status = 'Completed'
+            completedCards.push(item)
+            todoCards.splice(index, 1)
+            updateLocalStorage()
+          }
+        })
+        inProgressCards.forEach((item, index) => {
+          if (item.id == draggingElement.id) {
+            item.status = 'Completed'
+            completedCards.push(item)
+            inProgressCards.splice(index, 1)
+            updateLocalStorage()
+          }
+        })
+      }
+    })
+  })
+
+}
+
 function handleReload () {
   globalRender()
+  handleDragAndDrop()
 }
+
+function fetchData (url, callback) {
+  const xhr = new XMLHttpRequest()
+  xhr.open('GET', url)
+  xhr.onload = function () {
+    if (xhr.status == 200) {
+      callback(xhr.response)
+    } else if (xhr.status >= 400) {
+      console.error(`Error: status ${xhr.status} ${xhr.statusText}`)
+    }
+  }
+  xhr.onerror = function () {
+    console.error(`Something went wrong`)
+  }
+  xhr.send()
+}
+
+
+
 
 modalAddTodoElement.addEventListener('submit', handleAddTodo)
 listsElement.addEventListener('click', handleDeleteCertainTodo)
