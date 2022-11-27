@@ -90,7 +90,7 @@ function getCardTemplate (todoCard) {
               <div class="modal-footer">
                 <h5 class="modal-title">Choose User:</h5>
                 <select class="form-select form-select-sm todo-user card-users card-user${id}" value="${user}" aria-label=".form-select-sm example">
-                  <option selected value="${user}">${user}</option>
+                  <option selected value="${user}">Current User : ${user}</option>
                 </select>
                 <label for="colorpicker" class="form-label">Card color</label>
                 <input type="color" class="form-control form-control-color card-color${id}" id="colorpicker" value="${color}" title="Choose your color">
@@ -117,60 +117,53 @@ function updateLocalStorage () {
   localStorage.setItem('completed', JSON.stringify(completedCards))
 }
 
-function renderOptions (users) {
-  const result = users.reduce((prev, next) => {
+function renderOptions (data) {
+  const result = data.reduce((prev, next) => {
     if (next) {
       let pattern = getUserTemplate(next)
       return prev + pattern
     }
   }, '')
   document.querySelector('#users').innerHTML = result
+}
+
+async function renderCardsAfterFetch () {
+  try {
+    const response = await fetch(url)
+    const data = await response.json()
+    renderCertainCardOptions(data)
+  } catch (error) {
+    console.error('Something went wrong')
+  }
+}
+
+function renderCertainCardOptions (data) {
   const editUsersElements = document.querySelectorAll('.card-users')
+  const result = data.reduce((prev, next) => {
+    if (next) {
+      let pattern = getUserTemplate(next)
+      return prev + pattern
+    }
+  }, '')
   editUsersElements.forEach(item => {
     item.innerHTML += result
   })
 }
 
-
-
-function renderTodos () {
-  const result = todoCards.reduce((prev, next) => {
+function renderCards (data, element) {
+  const result = data.reduce((prev, next) => {
     if (next) {
       let pattern = getCardTemplate(next)
       return prev + pattern
     }
   }, '')
-  todoCardsElement.innerHTML = result
-}
-
-function renderInProgress () {
-  const result = inProgressCards.reduce((prev, next) => {
-    if (next) {
-      let pattern = getCardTemplate(next)
-      return prev + pattern
-    }
-  }, '')
-  inProgressCardsElement.innerHTML = result
-}
-
-function renderCompleted () {
-  const result = completedCards.reduce((prev, next) => {
-    if (next) {
-      let pattern = getCardTemplate(next)
-      return prev + pattern
-    }
-  }, '')
-  completedCardsElement.innerHTML = result
+  element.innerHTML = result
 }
 
 function globalRender () {
-  renderTodos()
-  renderInProgress()
-  renderCompleted()
-  fetchData(url, (response) => {
-    const apiData = JSON.parse(response)
-    renderOptions(apiData)
-  })
+  renderCards(todoCards, todoCardsElement)
+  renderCards(inProgressCards, inProgressCardsElement)
+  renderCards(completedCards, completedCardsElement)
 }
 
 function handleDeleteAllButton (event) {
@@ -205,23 +198,44 @@ function handleDeleteCertainTodo ({target}) {
 function handleChangeCategory ({target}) {
   if (target.classList.contains('form-select-lg')) {
     if (target.value == 'inProgress') {
-      todoCards.forEach((item, index) => {
-        if (item.id == target.id) {
-          item.status = 'In Progress'
-          inProgressCards.push(item)
-          todoCards.splice(index, 1)
-        }
-      })
-      completedCards.forEach((item, index) => {
-        if (item.id == target.id) {
-          item.status = 'In Progress'
-          inProgressCards.push(item)
-          completedCards.splice(index, 1)
-        }
-      })
       if (inProgressCards.length > 5) {
-        const modalSubmitInProgressElement = new bootstrap.Modal(document.querySelector('#modal-in-progress'))
-        modalSubmitInProgressElement.toggle()
+        const submitModal = document.querySelector('#modal-in-progress')
+        const submitChangeBsModal = new bootstrap.Modal(submitModal)
+        submitChangeBsModal.toggle()
+        submitModal.querySelector('.btn-primary').addEventListener('click', () => {
+          todoCards.forEach((item, index) => {
+            if (item.id == target.id) {
+              item.status = 'In Progress'
+              inProgressCards.push(item)
+              todoCards.splice(index, 1)
+            }
+          })
+          completedCards.forEach((item, index) => {
+            if (item.id == target.id) {
+              item.status = 'In Progress'
+              inProgressCards.push(item)
+              completedCards.splice(index, 1)
+            }
+          })
+          updateLocalStorage()
+          globalRender()
+          renderCardsAfterFetch()
+        })
+      } else {
+        todoCards.forEach((item, index) => {
+          if (item.id == target.id) {
+            item.status = 'In Progress'
+            inProgressCards.push(item)
+            todoCards.splice(index, 1)
+          }
+        })
+        completedCards.forEach((item, index) => {
+          if (item.id == target.id) {
+            item.status = 'In Progress'
+            inProgressCards.push(item)
+            completedCards.splice(index, 1)
+          }
+        })
       }
     } else if (target.value == 'completed') {
       todoCards.forEach((item, index) => {
@@ -256,6 +270,7 @@ function handleChangeCategory ({target}) {
     }
     updateLocalStorage()
     globalRender()
+    renderCardsAfterFetch()
   }
 }
 
@@ -304,6 +319,7 @@ function handleEditCertainCard (event) {
   }
   updateLocalStorage()
   globalRender()
+  renderCardsAfterFetch()
 }
 
 function handleClock () {
@@ -398,8 +414,14 @@ function handleDragAndDrop () {
 }
 
 function handleReload () {
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      renderOptions(data)
+    })
   globalRender()
   handleDragAndDrop()
+  renderCardsAfterFetch()
 }
 
 function fetchData (url, callback) {
