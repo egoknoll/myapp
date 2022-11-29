@@ -337,6 +337,7 @@ function handleAddTodo (event) {
   modalAddTodoBs.hide()
   updateLocalStorage()
   globalRender()
+  handleDragAndDrop()
 }
 
 
@@ -355,7 +356,7 @@ function handleDragAndDrop () {
     container.addEventListener('dragover', (event) => {
       event.preventDefault()
       const draggingElement = document.querySelector('.dragging')
-      container.appendChild(draggingElement)
+      // container.appendChild(draggingElement)
       if (container.classList.contains('in-progress-cards')) {
         todoCards.forEach((item, index) => {
           if (item.id == draggingElement.id) {
@@ -363,6 +364,8 @@ function handleDragAndDrop () {
             inProgressCards.push(item)
             todoCards.splice(index, 1)
             updateLocalStorage()
+            renderCards(inProgressCards, inProgressCardsElement)
+            renderCards(todoCards, todoCardsElement)
           }
         })
         completedCards.forEach((item, index) => {
@@ -371,6 +374,8 @@ function handleDragAndDrop () {
             inProgressCards.push(item)
             completedCards.splice(index, 1)
             updateLocalStorage()
+            renderCards(inProgressCards, inProgressCardsElement)
+            renderCards(completedCards, completedCardsElement)
           }
         })
       } else if (container.classList.contains('todo-cards')) {
@@ -380,6 +385,8 @@ function handleDragAndDrop () {
             todoCards.push(item)
             inProgressCards.splice(index, 1)
             updateLocalStorage()
+            renderCards(inProgressCards, inProgressCardsElement)
+            renderCards(todoCards, todoCardsElement)
           }
         })
         completedCards.forEach((item, index) => {
@@ -388,6 +395,8 @@ function handleDragAndDrop () {
             todoCards.push(item)
             completedCards.splice(index, 1)
             updateLocalStorage()
+            renderCards(completedCards, completedCardsElement)
+            renderCards(todoCards, todoCardsElement)
           }
         })
       } else if (container.classList.contains('completed-cards')){
@@ -397,6 +406,8 @@ function handleDragAndDrop () {
             completedCards.push(item)
             todoCards.splice(index, 1)
             updateLocalStorage()
+            renderCards(completedCards, completedCardsElement)
+            renderCards(todoCards, todoCardsElement)
           }
         })
         inProgressCards.forEach((item, index) => {
@@ -405,12 +416,13 @@ function handleDragAndDrop () {
             completedCards.push(item)
             inProgressCards.splice(index, 1)
             updateLocalStorage()
+            renderCards(inProgressCards, inProgressCardsElement)
+            renderCards(completedCards, completedCardsElement)
           }
         })
       }
     })
   })
-
 }
 
 function handleReload () {
