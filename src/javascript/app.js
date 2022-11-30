@@ -362,9 +362,10 @@ function handleDragAndDrop () {
           if (item.id == draggingElement.id) {
             item.status = 'In Progress'
             inProgressCards.push(item)
+            renderCards(inProgressCards, inProgressCardsElement)
+            renderCardsAfterFetch()
             todoCards.splice(index, 1)
             updateLocalStorage()
-            renderCards(inProgressCards, inProgressCardsElement)
             renderCards(todoCards, todoCardsElement)
           }
         })
@@ -372,9 +373,10 @@ function handleDragAndDrop () {
           if (item.id == draggingElement.id) {
             item.status = 'In Progress'
             inProgressCards.push(item)
+            renderCards(inProgressCards, inProgressCardsElement)
+            renderCardsAfterFetch()
             completedCards.splice(index, 1)
             updateLocalStorage()
-            renderCards(inProgressCards, inProgressCardsElement)
             renderCards(completedCards, completedCardsElement)
           }
         })
@@ -383,20 +385,22 @@ function handleDragAndDrop () {
           if (item.id == draggingElement.id) {
             item.status = 'Todo'
             todoCards.push(item)
+            renderCards(todoCards, todoCardsElement)
+            renderCardsAfterFetch()
             inProgressCards.splice(index, 1)
             updateLocalStorage()
             renderCards(inProgressCards, inProgressCardsElement)
-            renderCards(todoCards, todoCardsElement)
           }
         })
         completedCards.forEach((item, index) => {
           if (item.id == draggingElement.id) {
             item.status = 'Todo'
             todoCards.push(item)
+            renderCards(todoCards, todoCardsElement)
+            renderCardsAfterFetch()
             completedCards.splice(index, 1)
             updateLocalStorage()
             renderCards(completedCards, completedCardsElement)
-            renderCards(todoCards, todoCardsElement)
           }
         })
       } else if (container.classList.contains('completed-cards')){
@@ -404,9 +408,10 @@ function handleDragAndDrop () {
           if (item.id == draggingElement.id) {
             item.status = 'Completed'
             completedCards.push(item)
+            renderCards(completedCards, completedCardsElement)
+            renderCardsAfterFetch()
             todoCards.splice(index, 1)
             updateLocalStorage()
-            renderCards(completedCards, completedCardsElement)
             renderCards(todoCards, todoCardsElement)
           }
         })
@@ -414,10 +419,11 @@ function handleDragAndDrop () {
           if (item.id == draggingElement.id) {
             item.status = 'Completed'
             completedCards.push(item)
+            renderCards(completedCards, completedCardsElement)
+            renderCardsAfterFetch()
             inProgressCards.splice(index, 1)
             updateLocalStorage()
             renderCards(inProgressCards, inProgressCardsElement)
-            renderCards(completedCards, completedCardsElement)
           }
         })
       }
@@ -465,3 +471,4 @@ completeAllButtonElement.addEventListener('click', handleCompleteAllElement)
 
 window.addEventListener('DOMContentLoaded', handleClock)
 window.addEventListener('DOMContentLoaded', handleReload)
+window.addEventListener('mouseover', handleDragAndDrop)
