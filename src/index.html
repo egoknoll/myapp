@@ -22,7 +22,7 @@
   </header>
   <section class="lists">
     <div class="lists__todo-list roster">
-      <h1>TODO</h1>
+      <h1 class="lists__todo-list-title">TODO : 0</h1>
       <div class="todo-cards cards">
       </div>
       <div class="lists__todo-list-modal">
@@ -54,12 +54,12 @@
       </div>
     </div>
     <div class="lists__in-progress-list roster">
-      <h1>IN PROGRESS</h1>
+      <h1 class="lists__in-progress-list-title">IN PROGRESS : 0</h1>
       <div class="in-progress-cards cards"></div>
       <button class = "btn-complete-all btn btn-primary">Complete All</button>
     </div>
     <div class="lists__completed-list roster">
-      <h1>COMPLETED</h1>
+      <h1 class="lists__completed-list-title">COMPLETED : 0</h1>
       <div class="completed-cards cards"></div>
       <button class = "btn-delete-all btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirm-delete-all">Delete all</button>
       <form class="modal" id="confirm-delete-all">
@@ -94,6 +94,26 @@
       </div>
     </div>
   </section>
+  <button type="button" class="btn btn-primary secret-button" data-bs-toggle="modal" data-bs-target="#Astley">
+    secret button
+  </button>
+  <div class="modal fade" id="Astley" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+          <video class="secret-video" width="100%" height="100%" controls="controls">
+            <source src="./videos/Rick Astley - Never Gonna Give You Up (Official Music Video).mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary close-secret-button" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>
