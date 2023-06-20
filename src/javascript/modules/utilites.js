@@ -1,12 +1,12 @@
 import { getUserTemplate, getCardTemplate } from "./templates"
 import {
-  url
-  , todoCards
-  , inProgressCards
-  , completedCards
-  , todoCardsElement
-  , inProgressCardsElement
-  , completedCardsElement
+  url,
+  todoCards,
+  inProgressCards,
+  completedCards,
+  todoCardsElement,
+  inProgressCardsElement,
+  completedCardsElement,
 } from "./variables"
 
 function getTime () {
@@ -99,12 +99,12 @@ function countTasks () {
 }
 
 export {
-  getTime
-  , updateLocalStorage
-  , renderOptions
-  , renderCardsAfterFetch
-  , renderCertainCardOptions
-  , renderCards
-  , globalRender
-  , countTasks
+  getTime,
+  updateLocalStorage,
+  renderOptions,
+  renderCardsAfterFetch,
+  renderCertainCardOptions,
+  renderCards,
+  globalRender,
+  countTasks,
 }

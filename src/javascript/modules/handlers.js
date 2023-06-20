@@ -1,25 +1,25 @@
 import { getTime } from "./utilites"
 import {
-  url
-  , todoCards
-  , inProgressCards
-  , completedCards
-  , todoCardsElement
-  , inProgressCardsElement
-  , completedCardsElement
-  , todoTitleElement
-  , todoDescriptionElement
-  , todoUserElement
-  , todoColorpickerElement
-  , modalAddTodoElement
+  url,
+  todoCards,
+  inProgressCards,
+  completedCards,
+  todoCardsElement,
+  inProgressCardsElement,
+  completedCardsElement,
+  todoTitleElement,
+  todoDescriptionElement,
+  todoUserElement,
+  todoColorpickerElement,
+  modalAddTodoElement,
 } from "./variables"
 import {
-  globalRender
-  , renderOptions
-  , countTasks
-  , renderCardsAfterFetch
-  , renderCards
-  , updateLocalStorage
+  globalRender,
+  renderOptions,
+  countTasks,
+  renderCardsAfterFetch,
+  renderCards,
+  updateLocalStorage,
 } from "./utilites"
 
 import { Card } from "./classes"
@@ -324,15 +324,15 @@ function handleReload () {
 }
 
 export {
-  handleDeleteAllButton
-  , handleDeleteCertainTodo
-  , handleChangeCategory
-  , handleCompleteAllElement
-  , handleEditCertainCard
-  , handleClock
-  , handleAddTodo
-  , handleDragAndDrop
-  , handleReload
-  , hadleSecretButton
-  , hadleDismissSecretButton
+  handleDeleteAllButton,
+  handleDeleteCertainTodo,
+  handleChangeCategory,
+  handleCompleteAllElement,
+  handleEditCertainCard,
+  handleClock,
+  handleAddTodo,
+  handleDragAndDrop,
+  handleReload,
+  hadleSecretButton,
+  hadleDismissSecretButton,
 }

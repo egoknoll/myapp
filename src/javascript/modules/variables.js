@@ -21,22 +21,22 @@ const dismissSecretButtonElement = document.querySelector('.close-secret-button'
 
 
 export {
-  url
-  , todoCards
-  , inProgressCards
-  , completedCards
-  , listsElement
-  , modalAddTodoElement
-  , todoTitleElement
-  , todoDescriptionElement
-  , todoUserElement
-  , todoCardsElement
-  , inProgressCardsElement
-  , completedCardsElement
-  , deleteAllButtonElement
-  , todoColorpickerElement
-  , completeAllButtonElement
-  , buttonAddTodoElement
-  , secretButtonElement
-  , dismissSecretButtonElement
+  url,
+  todoCards,
+  inProgressCards,
+  completedCards,
+  listsElement,
+  modalAddTodoElement,
+  todoTitleElement,
+  todoDescriptionElement,
+  todoUserElement,
+  todoCardsElement,
+  inProgressCardsElement,
+  completedCardsElement,
+  deleteAllButtonElement,
+  todoColorpickerElement,
+  completeAllButtonElement,
+  buttonAddTodoElement,
+  secretButtonElement,
+  dismissSecretButtonElement,
 }

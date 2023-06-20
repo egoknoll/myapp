@@ -1,25 +1,25 @@
 
 import {
-  handleDeleteAllButton
-  , handleDeleteCertainTodo
-  , handleChangeCategory
-  , handleCompleteAllElement
-  , handleEditCertainCard
-  , handleClock
-  , handleAddTodo
-  , handleDragAndDrop
-  , handleReload
-  , hadleDismissSecretButton
-  , hadleSecretButton
+  handleDeleteAllButton,
+  handleDeleteCertainTodo,
+  handleChangeCategory,
+  handleCompleteAllElement,
+  handleEditCertainCard,
+  handleClock,
+  handleAddTodo,
+  handleDragAndDrop,
+  handleReload,
+  hadleDismissSecretButton,
+  hadleSecretButton,
 } from './modules/handlers'
 
 import {
-  modalAddTodoElement
-  , listsElement
-  , deleteAllButtonElement
-  , completeAllButtonElement
-  , secretButtonElement
-  , dismissSecretButtonElement
+  modalAddTodoElement,
+  listsElement,
+  deleteAllButtonElement,
+  completeAllButtonElement,
+  secretButtonElement,
+  dismissSecretButtonElement,
 } from './modules/variables'
 
 
